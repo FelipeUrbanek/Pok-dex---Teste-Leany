@@ -26,7 +26,7 @@ export function Home() {
 
   const { search, types, generations, weight, height, sortBy, setSearch, setSortBy } = useFiltersStore()
 
-  const { data, isLoading, isFetching, isSourceLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isFetching, isSourceLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePokemonBrowse({ search, types, generations, weight, height, sortBy })
 
   const items = data?.pages.flatMap((page) => page.items) ?? []
