@@ -68,17 +68,17 @@ export function Preloader() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-gray-900 overflow-hidden"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#F2F2F2] overflow-hidden"
     >
       <div className="relative flex flex-col items-center justify-center">
-        <div ref={ballRef} className="relative z-10 flex items-center justify-center text-white opacity-80">
+        <div ref={ballRef} className="relative z-10 flex items-center justify-center text-gray-300 opacity-80">
           <PokeballIcon className="h-32 w-32" />
         </div>
         <img
           ref={logoRef}
           src="https://www.leany.com.br/lovable-uploads/bf894694-b8cc-4d09-9fab-d469b452aa1e.png"
           alt="Leany"
-          className="absolute z-20 h-14 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]"
+          className="absolute z-20 h-14 object-contain drop-shadow-xl"
         />
       </div>
     </div>

@@ -239,6 +239,12 @@ export function FilterModal({ isOpen, onClose }: FilterModalProps) {
               setGenerations([])
               setWeightFilter('all')
               setHeightFilter('all')
+              
+              store.setTypes([])
+              store.setGenerations([])
+              store.setWeight(null)
+              store.setHeight(null)
+              handleClose()
             }}
             className="flex-1 rounded-2xl bg-white border border-gray-200 py-3.5 font-bold text-gray-600 transition-all hover:bg-gray-50 hover:border-gray-300"
           >

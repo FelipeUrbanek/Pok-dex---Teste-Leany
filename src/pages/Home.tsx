@@ -26,7 +26,7 @@ export function Home() {
 
   const { search, types, generations, weight, height, sortBy, setSearch, setSortBy } = useFiltersStore()
 
-  const { data, isLoading, isSourceLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isLoading, isFetching, isSourceLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePokemonBrowse({ search, types, generations, weight, height, sortBy })
 
   const items = data?.pages.flatMap((page) => page.items) ?? []
@@ -65,6 +65,8 @@ export function Home() {
 
   const activeFiltersCount = types.length + generations.length + (weight ? 1 : 0) + (height ? 1 : 0)
 
+  const isBusy = isFetching || isSourceLoading
+
   return (
     <div>
       <div className="mb-4">
@@ -95,17 +97,24 @@ export function Home() {
         </button>
       </div>
 
-      {(isLoading || isSourceLoading) && items.length === 0 && (
-        <p className="py-10 text-center text-sm font-medium text-gray-400">Carregando Pokémons...</p>
+      {isBusy && items.length === 0 && (
+        <div className="py-10 flex flex-col items-center justify-center">
+          <p className="text-sm font-bold text-gray-400 animate-pulse">Buscando Pokémons...</p>
+        </div>
       )}
 
-      {!isLoading && !isSourceLoading && items.length === 0 && (
+      {!isBusy && items.length === 0 && (
         <p className="py-10 text-center text-sm font-medium text-gray-400">
           Nenhum Pokémon encontrado com esses filtros.
         </p>
       )}
 
-      <div ref={gridRef} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div 
+        ref={gridRef} 
+        className={`grid grid-cols-1 gap-3 sm:grid-cols-2 transition-opacity duration-300 ${
+          isBusy && items.length > 0 ? 'opacity-40 pointer-events-none' : 'opacity-100'
+        }`}
+      >
         {items.map((pokemon) => (
           <PokemonCard key={pokemon.id} pokemon={pokemon} onSelect={openPokemon} />
         ))}
