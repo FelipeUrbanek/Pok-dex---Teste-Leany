@@ -14,9 +14,18 @@ export interface PokemonListResponse {
 
 export interface PokemonSprites {
   front_default: string | null
+  back_default?: string | null
+  front_shiny?: string | null
+  back_shiny?: string | null
   other: {
     'official-artwork': {
       front_default: string | null
+    }
+    showdown?: {
+      front_default: string | null
+      back_default: string | null
+      front_shiny: string | null
+      back_shiny: string | null
     }
   }
 }

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getPokemonByName, getSpeciesByName } from '../api/pokeapi'
 import { toPokemonDetail } from '../utils/mappers'
+import { translateText } from '../utils/translate'
 
 export function usePokemonDetail(name: string | null) {
   return useQuery({
@@ -8,7 +9,13 @@ export function usePokemonDetail(name: string | null) {
     queryFn: async () => {
       const raw = await getPokemonByName(name!)
       const species = await getSpeciesByName(raw.species.name)
-      return toPokemonDetail(raw, species)
+      const detail = toPokemonDetail(raw, species)
+      
+      detail.description = translateText(detail.description)
+      detail.category = translateText(detail.category)
+      detail.ability = translateText(detail.ability)
+      
+      return detail
     },
     enabled: name !== null,
   })

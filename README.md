@@ -1,64 +1,64 @@
-# Pokédex
+# Pokédex - Teste Técnico Leany
 
-Pokédex feita em React + TypeScript consumindo a [PokeAPI](https://pokeapi.co). Projeto desenvolvido como case técnico para a vaga de Desenvolvedor Frontend JR na Leany.
+![React](https://img.shields.io/badge/React-18.x-61DAFB?style=flat-square&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=flat-square&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-4.x-black?style=flat-square)
+![React Query](https://img.shields.io/badge/React_Query-5.x-FF4154?style=flat-square&logo=react-query&logoColor=white)
+![GSAP](https://img.shields.io/badge/GSAP-3.x-88CE02?style=flat-square&logo=greensock&logoColor=white)
 
-Deploy: _(link entra aqui depois do deploy)_
+Uma Pokédex responsiva e interativa desenvolvida como resolução do desafio técnico para desenvolvedor Frontend na Leany. A aplicação consome a [PokeAPI](https://pokeapi.co/) para exibir uma listagem infinita de Pokémons, detalhes, evoluções e funcionalidades avançadas como filtros compostos e comparador de status.
 
-## Funcionalidades
+Desenvolvido por [Felipe Urbanek](https://felipeurbanek.com).
 
-- Listagem de Pokémons com nome, sprite e tipos, com paginação via "carregar mais"
-- Busca por nome (considera a lista completa de Pokémons, não só o que já foi carregado)
-- Filtro por tipo e ordenação (menor/maior número, A-Z, Z-A)
-- Detalhe do Pokémon em modal: stats base, peso, altura, categoria, habilidade, fraquezas e cadeia evolutiva
-- Favoritar/desfavoritar, com página de favoritos e persistência em `localStorage`
-- Comparação de estatísticas entre dois Pokémons
-- Interface responsiva (mobile e desktop), com layout inspirado no Figma fornecido no case
+## 📸 Preview
 
-## Rodando localmente
+| Tela Inicial | Filtros |
+|:---:|:---:|
+| ![Home](./public/screenshots/home.png) | ![Filtros](./public/screenshots/filters.png) |
 
-Pré-requisito: Node 20+.
+| Detalhes & Evolução | Comparador de Status |
+|:---:|:---:|
+| ![Detalhes](./public/screenshots/modal.png) | ![Comparador](./public/screenshots/compare.png) |
 
+## 🚀 Como rodar localmente
+
+Certifique-se de ter o Node.js instalado (v18+ recomendado).
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/FelipeUrbanek/Pok-dex---Teste-Leany.git
+```
+
+2. Instale as dependências:
 ```bash
 npm install
+```
+
+3. Inicie o servidor local:
+```bash
 npm run dev
 ```
 
-Abre em `http://localhost:5173`.
+## ✨ Funcionalidades
 
-Outros scripts:
+Abaixo as entregas principais de acordo com os requisitos do case:
 
-```bash
-npm run build    # build de produção (roda o typecheck antes)
-npm run preview  # serve o build de produção localmente
-npm run lint     # lint com oxlint
-```
+- **Listagem e Busca Infinita**: Carregamento sob demanda (infinite scroll) consumindo a REST API. A busca por nome é feita localmente num cache em memória para resposta instantânea.
+- **Filtros Avançados (GraphQL)**: Para resolver o problema de filtrar dados complexos sem baixar toda a base da PokeAPI, integrei a API GraphQL Beta oficial deles. Assim, é possível cruzar "Tipo", "Altura", "Peso" e "Geração" com alta performance, repassando os IDs paginados para a listagem principal.
+- **Favoritos Persistentes**: Salve Pokémons em sua lista pessoal utilizando o `Zustand`, persistido nativamente no `localStorage`.
+- **Comparador de Status**: Escolha dois Pokémons da listagem ou favoritos e compare lado a lado seus atributos (HP, Ataque, Defesa, etc.). As barras de atributos se adaptam dinamicamente baseando-se no maior valor do par.
+- **Detalhes Completos & Cadeia Evolutiva**: Modelagem recursiva das cadeias de evolução, renderizando as miniaturas na ordem de crescimento, junto às descrições e atributos corporais.
+- **Tradução em Lote**: A API não possui dados totalmente traduzidos das gerações mais antigas. Criei um utilitário local em TypeScript mapeando chaves de descrições e categorias (ex: "Seed Pokémon" para "Pokémon Semente") a fim de entregar uma experiência 100% em PT-BR para o usuário brasileiro.
+- **Micro-interações**: Uso pesado de GSAP para animações fluídas (como os saltinhos na capa do Pokémon, abertura de modais com Blur-in e preenchimento de barras de status).
 
-## Stack e decisões técnicas
+## 📁 Arquitetura do Projeto
 
-- **Vite + React + TypeScript** — SPA simples, sem necessidade de SSR para o escopo do case.
-- **Zustand** para estado global (favoritos, seleção de comparação e filtros), com o middleware `persist` cuidando do `localStorage` dos favoritos.
-- **TanStack Query** para cache e controle de loading/erro nas chamadas à PokeAPI, incluindo paginação via `useInfiniteQuery`.
-- **React Router** para as rotas `/`, `/favoritos` e `/comparar`. O modal de detalhe fica sincronizado com um query param (`?pokemon=nome`) em vez de rota própria, pra permitir compartilhar o link direto pra um Pokémon sem duplicar telas.
-- **Tailwind CSS** para estilização e responsividade.
-
-### Sobre a busca e o filtro por tipo
-
-A listagem básica da PokeAPI (`/pokemon`) só devolve nome e URL — sprite, tipos etc. vêm de uma segunda chamada por Pokémon. Pra busca funcionar em toda a Pokédex (não só nos 20 primeiros carregados), o app busca uma vez a lista completa de nomes (endpoint leve, sem detalhes) e filtra isso no client; os detalhes de cada Pokémon só são buscados sob demanda, para os itens que efetivamente aparecem na página atual. O mesmo vale pro filtro por tipo, que usa o endpoint `/type/{nome}`.
-
-### Sobre as fraquezas do Pokémon
-
-O cálculo de fraquezas soma os tipos que causam dano dobrado contra cada um dos tipos do Pokémon (via `double_damage_from`). Não faz a multiplicação cruzada entre os dois tipos (que pode gerar resistência x4 ou anular uma fraqueza) — pra a maioria dos Pokémons o resultado bate com o jogo, mas em alguns casos de dois tipos com relação de cancelamento entre si o valor pode divergir ligeiramente da fórmula oficial.
-
-### Tipagem
-
-TypeScript em todo o projeto, sem `any`. Os tipos ficam divididos em duas camadas:
-
-- `src/api/types.ts` — formato bruto das respostas da PokeAPI (só os campos usados)
-- `src/types/pokemon.ts` — tipos de domínio já normalizados (ex: altura em metros, peso em kg), usados pelos componentes
-
-A conversão de um formato pro outro fica em `src/utils/mappers.ts`.
-
-## Limitações conhecidas
-
-- A cadeia evolutiva é renderizada como uma lista linear; em casos de evolução ramificada (como Eevee) todas as ramificações aparecem em sequência, não em árvore.
-- Fraquezas seguem a simplificação descrita acima.
+O projeto segue um padrão voltado para manutenção e separação de responsabilidades (Clean Code / SOLID):
+- `/src/api` - Comunicação com APIs (Fetch, chamadas REST/GraphQL).
+- `/src/components` - Componentes atômicos e blocos da interface.
+- `/src/hooks` - Hooks dedicados (usando React Query) que isolam toda regra de chamadas HTTP dos componentes visuais.
+- `/src/pages` - Telas de navegação da aplicação.
+- `/src/store` - Estado global focado (filtros, favoritos, status do comparador).
+- `/src/utils` - Utilitários puros (mapeadores de dados, conversores de cores tipológicas, formatadores numéricos).

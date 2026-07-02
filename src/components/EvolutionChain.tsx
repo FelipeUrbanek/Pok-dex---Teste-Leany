@@ -1,7 +1,7 @@
 import { useEvolutionChain } from '../hooks/useEvolutionChain'
-import { formatId, formatPokemonName } from '../utils/formatters'
+import { formatPokemonName } from '../utils/formatters'
 import { typeColor } from '../utils/typeColors'
-import { ChevronDownIcon } from './icons'
+import { ChevronDownIcon, TypeIcon } from './icons'
 
 interface Props {
   speciesName: string
@@ -20,33 +20,49 @@ export function EvolutionChain({ speciesName, onSelect }: Props) {
   }
 
   return (
-    <div className="rounded-2xl border border-gray-200 p-3">
+    <div className="flex flex-col gap-1">
       {data.map((node, index) => (
         <div key={node.name}>
           {index > 0 && (
-            <div className="flex items-center gap-1.5 py-1 pl-7 text-xs font-medium text-[#173EA5]">
-              <ChevronDownIcon className="h-4 w-4" />
+            <div className="flex flex-col items-center justify-center py-1 text-xs font-bold text-[#173EA5]">
+              <ChevronDownIcon className="h-6 w-6" />
               {node.minLevel ? `Nível ${node.minLevel}` : 'Evolução'}
             </div>
           )}
           <button
             type="button"
             onClick={() => onSelect(node.name)}
-            className="flex w-full items-center gap-3 rounded-full border border-gray-200 p-1.5 pr-4 text-left transition hover:bg-gray-50"
+            className="flex w-full items-center gap-3 rounded-[90px] border border-gray-200 p-2 pr-4 text-left transition hover:bg-gray-50"
           >
             <div
-              className="flex h-[74px] w-24 shrink-0 items-center justify-center rounded-full"
+              className="relative flex h-[74px] w-[96px] shrink-0 items-center justify-center rounded-[71px] overflow-hidden"
               style={{ backgroundColor: typeColor(node.types[0]) }}
             >
+              <div className="absolute inset-0 opacity-20 flex items-center justify-center pointer-events-none">
+                <TypeIcon type={node.types[0]} className="h-16 w-16" color="#FFFFFF" />
+              </div>
               <img
                 src={node.sprite}
                 alt={node.name}
-                className="h-16 w-16 object-contain [image-rendering:pixelated]"
+                className="relative z-10 h-[81px] w-[108px] object-contain drop-shadow-md [image-rendering:pixelated]"
               />
             </div>
-            <div>
-              <p className="text-sm font-semibold text-black">{formatPokemonName(node.name)}</p>
-              <p className="text-xs text-gray-500">{formatId(node.id)}</p>
+            <div className="flex flex-col gap-[2px]">
+              <p className="text-[16px] font-medium leading-none text-[#1A1A1A]">
+                {formatPokemonName(node.name)}
+              </p>
+              <p className="text-[12px] font-medium text-[#4D4D4D]">Nº{String(node.id).padStart(3, '0')}</p>
+              <div className="mt-1 flex gap-1">
+                {node.types.map((type) => (
+                  <div
+                    key={type}
+                    className="flex h-[16px] w-[60px] items-center justify-center rounded-[20px]"
+                    style={{ backgroundColor: typeColor(type) }}
+                  >
+                    <TypeIcon type={type} className="h-[12px] w-[12px] text-white" color="#FFF" />
+                  </div>
+                ))}
+              </div>
             </div>
           </button>
         </div>

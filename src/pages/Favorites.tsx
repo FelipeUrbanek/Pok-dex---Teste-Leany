@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import gsap from 'gsap'
 import { useFavoritesStore } from '../store/favorites'
 import { PokemonCard } from '../components/PokemonCard'
 import { PokemonModal } from '../components/PokemonModal'
@@ -8,6 +10,18 @@ export function Favorites() {
   const favorites = useFavoritesStore((s) => s.favorites)
   const [searchParams, setSearchParams] = useSearchParams()
   const selectedName = searchParams.get('pokemon')
+  
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (favorites.length > 0 && containerRef.current) {
+      gsap.fromTo(
+        containerRef.current.children,
+        { opacity: 0, y: 30, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.05, ease: 'back.out(1.2)', overwrite: 'auto' }
+      )
+    }
+  }, [favorites.length])
 
   function openPokemon(name: string) {
     setSearchParams((params) => {
@@ -42,7 +56,7 @@ export function Favorites() {
       <h1 className="mb-4 text-lg font-semibold text-gray-800">
         Seus favoritos ({favorites.length})
       </h1>
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+      <div ref={containerRef} className="grid grid-cols-1 gap-[12px] sm:grid-cols-2">
         {favorites.map((pokemon) => (
           <PokemonCard key={pokemon.id} pokemon={pokemon} onSelect={openPokemon} />
         ))}

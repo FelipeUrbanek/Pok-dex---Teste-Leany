@@ -1,13 +1,12 @@
+import { useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
 import { usePokemonDetail } from '../hooks/usePokemonDetail'
 import { usePokemonWeaknesses } from '../hooks/usePokemonWeaknesses'
 import { useFavoritesStore } from '../store/favorites'
-import { useCompareStore } from '../store/compare'
 import { EvolutionChain } from './EvolutionChain'
 import {
   AbilityIcon,
-  BackArrowIcon,
   CategoryIcon,
-  CompareIcon,
   FemaleIcon,
   HeartIcon,
   MaleIcon,
@@ -16,7 +15,7 @@ import {
   WeightIcon,
 } from './icons'
 import { typeColor, typeLabel } from '../utils/typeColors'
-import { formatId, formatPokemonName, formatStatName } from '../utils/formatters'
+import { formatPokemonName } from '../utils/formatters'
 
 interface Props {
   name: string
@@ -24,25 +23,59 @@ interface Props {
   onSelectPokemon: (name: string) => void
 }
 
-const MAX_STAT = 180
+
 
 export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
   const { data: pokemon, isLoading } = usePokemonDetail(name)
   const { data: weaknesses } = usePokemonWeaknesses(pokemon?.types ?? [])
   const isFavorite = useFavoritesStore((s) => (pokemon ? s.isFavorite(pokemon.name) : false))
   const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite)
-  const isCompareSelected = useCompareStore((s) => s.isSelected(name))
-  const toggleCompare = useCompareStore((s) => s.toggleFromCard)
 
   const headerColor = pokemon ? typeColor(pokemon.types[0]) : '#173EA5'
 
+  const overlayRef = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
+  const imageRef = useRef<HTMLImageElement>(null)
+  
+  const [spriteIndex, setSpriteIndex] = useState(0)
+
+  const handleImageClick = () => {
+    if (!pokemon || !pokemon.sprites || pokemon.sprites.length <= 1 || !imageRef.current) return
+    const nextIndex = (spriteIndex + 1) % pokemon.sprites.length
+    
+    gsap.to(imageRef.current, {
+      rotationY: '+=180',
+      duration: 0.6,
+      ease: 'power2.inOut',
+      onComplete: () => {
+        setSpriteIndex(nextIndex)
+      }
+    })
+    // Also we want to swap the image at 90 degrees so it looks natural
+    setTimeout(() => {
+      setSpriteIndex(nextIndex)
+    }, 300)
+  }
+
+  useEffect(() => {
+    if (!overlayRef.current || !panelRef.current) return
+    gsap.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.2 })
+    gsap.fromTo(
+      panelRef.current,
+      { opacity: 0, y: 24, scale: 0.97 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' },
+    )
+  }, [])
+
   return (
     <div
+      ref={overlayRef}
       className="fixed inset-0 z-20 flex items-center justify-center bg-black/50 p-4"
       onClick={onClose}
     >
       <div
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white"
+        ref={panelRef}
+        className="no-scrollbar max-h-[90vh] w-full max-w-[360px] overflow-y-auto overflow-x-hidden rounded-[24px] bg-white shadow-2xl"
         onClick={(event) => event.stopPropagation()}
       >
         {isLoading || !pokemon ? (
@@ -50,59 +83,67 @@ export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
         ) : (
           <>
             <div
-              className="relative flex flex-col items-center overflow-hidden pb-4 pt-5"
-              style={{
-                background: `linear-gradient(180deg, ${headerColor}99 0%, ${headerColor}26 100%)`,
-              }}
+              className="relative flex w-full flex-col items-center"
+              style={{ height: '307px' }}
             >
-              <div className="flex w-full items-center justify-between px-4">
+              {/* Ellipse background */}
+              <div
+                className="absolute"
+                style={{
+                  width: '498px',
+                  height: '498px',
+                  left: '-69px',
+                  top: '-227px',
+                  borderRadius: '50%',
+                  background: `linear-gradient(180deg, ${headerColor} 0%, ${headerColor}99 100%)`,
+                }}
+              />
+              
+              {/* Watermark */}
+              <TypeIcon
+                type={pokemon.types[0]}
+                color="#FFFFFF"
+                className="pointer-events-none absolute h-[204px] w-[204px] opacity-20"
+                style={{ left: '77px', top: '35px' }}
+              />
+
+              {/* Header icons */}
+              <div className="absolute left-[16px] right-[16px] top-[19px] flex items-center justify-between">
                 <button
                   type="button"
                   onClick={onClose}
                   aria-label="Fechar"
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-gray-700"
+                  className="flex h-[38px] w-[38px] items-center justify-center text-white transition hover:scale-110"
                 >
-                  <BackArrowIcon className="h-5 w-5" />
+                  <span className="text-3xl leading-none">×</span>
                 </button>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => toggleCompare(pokemon.name)}
-                    aria-label={isCompareSelected ? 'Remover da comparação' : 'Adicionar à comparação'}
-                    className={`flex h-9 w-9 items-center justify-center rounded-full ${
-                      isCompareSelected ? 'bg-[#173EA5] text-white' : 'bg-white text-gray-500'
-                    }`}
-                  >
-                    <CompareIcon className="h-5 w-5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => toggleFavorite(pokemon)}
-                    aria-label={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-white"
-                  >
-                    <HeartIcon filled={isFavorite} outlineColor="#999999" className="h-5 w-5" />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => toggleFavorite(pokemon)}
+                  aria-label={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+                  className="flex h-[28px] w-[28px] items-center justify-center transition hover:scale-110"
+                >
+                  <HeartIcon filled={isFavorite} outlineColor="#FFFFFF" className="h-[28px] w-[28px] text-white" />
+                </button>
               </div>
-              <TypeIcon
-                type={pokemon.types[0]}
-                color="#FFFFFF"
-                className="pointer-events-none absolute left-1/2 top-2 h-48 w-48 -translate-x-1/2 opacity-40"
-              />
-              <img
-                src={pokemon.artwork}
-                alt={pokemon.name}
-                className="relative z-[1] mt-2 h-36 w-36 object-contain [image-rendering:pixelated]"
-              />
+
+              {/* Sprite */}
+              <div className="absolute z-10 flex cursor-pointer items-center justify-center" style={{ top: '80px', perspective: '1000px' }} onClick={handleImageClick}>
+                <img
+                  ref={imageRef}
+                  src={pokemon.sprites && pokemon.sprites.length > 0 ? pokemon.sprites[spriteIndex] : pokemon.artwork}
+                  alt={pokemon.name}
+                  className="h-[210px] w-[210px] object-contain drop-shadow-lg [image-rendering:pixelated]"
+                />
+              </div>
             </div>
 
-            <div className="flex flex-col items-center px-6 pt-4">
-              <h2 className="text-2xl font-semibold text-black">
+            <div className="flex flex-col items-start px-6 pt-4">
+              <h2 className="text-3xl font-semibold text-black">
                 {formatPokemonName(pokemon.name)}
               </h2>
-              <span className="text-xs text-gray-500">{formatId(pokemon.id)}</span>
-              <div className="mt-2 flex gap-1.5">
+              <span className="text-sm font-medium text-gray-500">Nº{String(pokemon.id).padStart(3, '0')}</span>
+              <div className="mt-3 flex gap-2">
                 {pokemon.types.map((type) => (
                   <span
                     key={type}
@@ -116,37 +157,37 @@ export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
               </div>
 
               {pokemon.description && (
-                <p className="mt-3 text-center text-sm leading-relaxed text-gray-600">
+                <p className="mt-4 text-left text-sm leading-relaxed text-gray-600">
                   {pokemon.description}
                 </p>
               )}
 
-              <div className="mt-5 h-px w-full bg-gray-100" />
+              <div className="mt-6 h-px w-full bg-gray-100" />
 
-              <div className="mt-5 grid w-full grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-gray-200 p-3">
-                  <p className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
+              <div className="mt-6 grid w-full grid-cols-2 gap-3">
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-200 py-3">
+                  <p className="mb-1 flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
                     <WeightIcon className="h-3.5 w-3.5" /> Peso
                   </p>
-                  <p className="text-base font-semibold text-gray-900">{pokemon.weightKg} kg</p>
+                  <p className="text-[15px] font-semibold text-gray-800">{pokemon.weightKg.toString().replace('.', ',')} kg</p>
                 </div>
-                <div className="rounded-2xl border border-gray-200 p-3">
-                  <p className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-200 py-3">
+                  <p className="mb-1 flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
                     <RulerIcon className="h-3.5 w-3.5" /> Altura
                   </p>
-                  <p className="text-base font-semibold text-gray-900">{pokemon.heightM} m</p>
+                  <p className="text-[15px] font-semibold text-gray-800">{pokemon.heightM.toString().replace('.', ',')} m</p>
                 </div>
-                <div className="rounded-2xl border border-gray-200 p-3">
-                  <p className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-200 py-3">
+                  <p className="mb-1 flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
                     <CategoryIcon className="h-3.5 w-3.5" /> Categoria
                   </p>
-                  <p className="text-base font-semibold text-gray-900">{pokemon.category || '—'}</p>
+                  <p className="text-[15px] font-semibold text-gray-800">{pokemon.category || '—'}</p>
                 </div>
-                <div className="rounded-2xl border border-gray-200 p-3">
-                  <p className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-200 py-3">
+                  <p className="mb-1 flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
                     <AbilityIcon className="h-3.5 w-3.5" /> Habilidade
                   </p>
-                  <p className="text-base font-semibold text-gray-900">{pokemon.ability}</p>
+                  <p className="text-[15px] font-semibold text-gray-800">{pokemon.ability}</p>
                 </div>
               </div>
 
@@ -199,29 +240,7 @@ export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
               )}
 
               <div className="mt-6">
-                <h3 className="mb-2 text-sm font-semibold text-gray-700">Status base</h3>
-                <div className="space-y-2">
-                  {pokemon.stats.map((stat) => (
-                    <div key={stat.name} className="flex items-center gap-2 text-xs">
-                      <span className="w-20 shrink-0 text-gray-500">
-                        {formatStatName(stat.name)}
-                      </span>
-                      <span className="w-8 shrink-0 text-right font-medium text-gray-700">
-                        {stat.base}
-                      </span>
-                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
-                        <div
-                          className="h-full rounded-full bg-[#173EA5]"
-                          style={{ width: `${Math.min(100, (stat.base / MAX_STAT) * 100)}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <h3 className="mb-2 text-sm font-semibold text-gray-700">Evolução</h3>
+                <h3 className="mb-2 text-sm font-semibold text-gray-700">Evoluções</h3>
                 <EvolutionChain speciesName={pokemon.speciesName} onSelect={onSelectPokemon} />
               </div>
             </div>

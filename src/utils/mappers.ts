@@ -1,19 +1,15 @@
 import type { RawPokemon, RawPokemonSpecies } from '../api/types'
 import type { PokemonDetail, PokemonStat, PokemonSummary, PokemonType } from '../types/pokemon'
-import { formatPokemonName } from './formatters'
 
 function getSprite(raw: RawPokemon): string {
-  return (
-    raw.sprites.front_default ??
-    raw.sprites.other['official-artwork'].front_default ??
-    ''
-  )
+  return raw.sprites.other?.showdown?.front_default ?? raw.sprites.front_default ?? ''
 }
 
 function getGenus(species: RawPokemonSpecies | undefined): string {
   if (!species) return ''
   const entry =
     species.genera.find((g) => g.language.name === 'pt-br') ??
+    species.genera.find((g) => g.language.name === 'pt') ??
     species.genera.find((g) => g.language.name === 'en')
   return entry?.genus ?? ''
 }
@@ -22,6 +18,7 @@ function getDescription(species: RawPokemonSpecies | undefined): string {
   if (!species) return ''
   const entry =
     species.flavor_text_entries.find((f) => f.language.name === 'pt-br') ??
+    species.flavor_text_entries.find((f) => f.language.name === 'pt') ??
     species.flavor_text_entries.find((f) => f.language.name === 'en')
   return entry?.flavor_text.replace(/[\n\f\r]+/g, ' ') ?? ''
 }
@@ -31,6 +28,12 @@ export function toPokemonSummary(raw: RawPokemon): PokemonSummary {
     id: raw.id,
     name: raw.name,
     sprite: getSprite(raw),
+    sprites: [
+      raw.sprites.other?.showdown?.front_default ?? raw.sprites.front_default,
+      raw.sprites.other?.showdown?.back_default ?? raw.sprites.back_default,
+      raw.sprites.other?.showdown?.front_shiny ?? raw.sprites.front_shiny,
+      raw.sprites.other?.showdown?.back_shiny ?? raw.sprites.back_shiny,
+    ].filter(Boolean) as string[],
     types: raw.types.map((t) => t.type.name as PokemonType),
   }
 }
@@ -50,7 +53,7 @@ export function toPokemonDetail(raw: RawPokemon, species?: RawPokemonSpecies): P
     weightKg: raw.weight / 10,
     stats,
     speciesName: raw.species.name,
-    ability: ability ? formatPokemonName(ability.ability.name) : '—',
+    ability: ability ? ability.ability.name : '—',
     category: getGenus(species),
     description: getDescription(species),
     femaleRate:

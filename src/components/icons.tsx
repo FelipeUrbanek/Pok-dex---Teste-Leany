@@ -11,16 +11,19 @@ import {
   Ruler,
   Mars,
   Venus,
+  Filter,
 } from 'lucide-react'
 import type { PokemonType } from '../types/pokemon'
 
 interface IconProps {
   className?: string
+  style?: React.CSSProperties
 }
 
 export function TypeIcon({
   type,
   className,
+  style,
   color = '#FFFFFF',
 }: IconProps & { type: PokemonType; color?: string }) {
   const maskImage = `url(/icons/types/${type}.svg)`
@@ -29,6 +32,7 @@ export function TypeIcon({
       aria-hidden="true"
       className={className}
       style={{
+        ...style,
         display: 'inline-block',
         backgroundColor: color,
         WebkitMaskImage: maskImage,
@@ -111,4 +115,8 @@ export function MaleIcon({ className }: IconProps) {
 
 export function FemaleIcon({ className }: IconProps) {
   return <Venus className={className} strokeWidth={2} />
+}
+
+export function FilterIcon({ className }: IconProps) {
+  return <Filter className={className} strokeWidth={2} />
 }

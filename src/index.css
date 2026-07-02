@@ -6,3 +6,50 @@ body {
   background-color: #f2f2f2;
   color: #1a1a1a;
 }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999999;
+}
+
+/* Hide scrollbar for clean modal look */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Toastify Styles */
+.Toastify__toast-container {
+  padding: 16px;
+}
+.Toastify__toast {
+  border-radius: 16px !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  color: #1a1a1a !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+.Toastify__close-button {
+  color: #666 !important;
+}
