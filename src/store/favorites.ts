@@ -22,7 +22,6 @@ export const useFavoritesStore = create<FavoritesState>()(
           set({ items: [...items, pokemon] })
         }
       },
-      isFavorite: (name) => get().favorites.some((f) => f.name === name),
     }),
     { name: 'pokedex-favorites' },
   ),

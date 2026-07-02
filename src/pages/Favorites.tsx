@@ -7,7 +7,7 @@ import { PokemonModal } from '../components/PokemonModal'
 import { EmptyFishIcon } from '../components/icons'
 
 export function Favorites() {
-  const favorites = useFavoritesStore((s) => s.favorites)
+  const favorites = useFavoritesStore((s) => s.items)
   const [searchParams, setSearchParams] = useSearchParams()
   const selectedName = searchParams.get('pokemon')
   
