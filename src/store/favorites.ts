@@ -1,32 +1,26 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { toast } from 'react-toastify'
 import type { PokemonSummary } from '../types/pokemon'
-import { formatPokemonName } from '../utils/formatters'
 
 interface FavoritesState {
-  favorites: PokemonSummary[]
-  toggleFavorite: (pokemon: PokemonSummary) => void
+  items: PokemonSummary[]
   isFavorite: (name: string) => boolean
+  toggleFavorite: (pokemon: PokemonSummary) => void
 }
 
 export const useFavoritesStore = create<FavoritesState>()(
   persist(
     (set, get) => ({
-      favorites: [],
+      items: [],
+      isFavorite: (name) => get().items.some((p) => p.name === name),
       toggleFavorite: (pokemon) => {
-        const exists = get().favorites.some((f) => f.name === pokemon.name)
-        set({
-          favorites: exists
-            ? get().favorites.filter((f) => f.name !== pokemon.name)
-            : [...get().favorites, pokemon],
-        })
-        const label = formatPokemonName(pokemon.name)
-        toast(
-          exists
-            ? `💔 ${label} removido dos favoritos`
-            : `❤️ ${label} adicionado aos favoritos`,
-        )
+        const { items } = get()
+        const exists = items.some((p) => p.name === pokemon.name)
+        if (exists) {
+          set({ items: items.filter((p) => p.name !== pokemon.name) })
+        } else {
+          set({ items: [...items, pokemon] })
+        }
       },
       isFavorite: (name) => get().favorites.some((f) => f.name === name),
     }),

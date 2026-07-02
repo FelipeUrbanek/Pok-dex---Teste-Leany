@@ -175,13 +175,15 @@ export function Compare() {
       </div>
 
       {(slotA || slotB) && (
-        <button
-          type="button"
-          onClick={clear}
-          className="mb-4 text-sm font-medium text-gray-500 underline"
-        >
-          limpar seleção
-        </button>
+        <div className="mb-4 text-center">
+          <button
+            type="button"
+            onClick={clear}
+            className="rounded-full bg-gray-900 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition hover:bg-black"
+          >
+            Limpar seleção
+          </button>
+        </div>
       )}
 
       {!ready && (
@@ -211,12 +213,15 @@ export function Compare() {
                         🏆 Vencedor
                       </span>
                     )}
+                    <div className="absolute inset-0 z-0 opacity-30 flex items-center justify-center pointer-events-none">
+                      <TypeIcon type={pokemon.types[0]} className="h-28 w-28" color={typeColor(pokemon.types[0])} />
+                    </div>
                     <img
                       src={pokemon.artwork}
                       alt={pokemon.name}
                       className="absolute z-10 max-h-full max-w-full object-contain drop-shadow-xl transition-transform hover:scale-110 hover:-rotate-3 [image-rendering:pixelated]"
                     />
-                    <div className="absolute inset-0 z-0 rounded-full bg-white/30 blur-2xl" />
+                    <div className="absolute inset-0 z-0 rounded-full bg-white/30 blur-2xl pointer-events-none" />
                   </div>
                   <p className="mt-4 text-xl font-black text-gray-900 capitalize">{formatPokemonName(pokemon.name)}</p>
                   <div className="mt-1 flex gap-1">
