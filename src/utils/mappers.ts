@@ -18,6 +18,14 @@ function getGenus(species: RawPokemonSpecies | undefined): string {
   return entry?.genus ?? ''
 }
 
+function getDescription(species: RawPokemonSpecies | undefined): string {
+  if (!species) return ''
+  const entry =
+    species.flavor_text_entries.find((f) => f.language.name === 'pt-br') ??
+    species.flavor_text_entries.find((f) => f.language.name === 'en')
+  return entry?.flavor_text.replace(/[\n\f\r]+/g, ' ') ?? ''
+}
+
 export function toPokemonSummary(raw: RawPokemon): PokemonSummary {
   return {
     id: raw.id,
@@ -44,6 +52,7 @@ export function toPokemonDetail(raw: RawPokemon, species?: RawPokemonSpecies): P
     speciesName: raw.species.name,
     ability: ability ? formatPokemonName(ability.ability.name) : '—',
     category: getGenus(species),
+    description: getDescription(species),
   }
 }
 

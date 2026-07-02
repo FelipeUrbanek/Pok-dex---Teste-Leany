@@ -3,7 +3,7 @@ import { usePokemonWeaknesses } from '../hooks/usePokemonWeaknesses'
 import { useFavoritesStore } from '../store/favorites'
 import { useCompareStore } from '../store/compare'
 import { EvolutionChain } from './EvolutionChain'
-import { CompareIcon, HeartIcon, TypeIcon } from './icons'
+import { BackArrowIcon, CompareIcon, HeartIcon, TypeIcon } from './icons'
 import { typeColor, typeLabel } from '../utils/typeColors'
 import { formatId, formatPokemonName, formatStatName } from '../utils/formatters'
 
@@ -40,11 +40,18 @@ export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
           <>
             <div
               className="relative flex flex-col items-center overflow-hidden pb-4 pt-5"
-              style={{ backgroundColor: `${headerColor}33` }}
+              style={{
+                background: `linear-gradient(180deg, ${headerColor}99 0%, ${headerColor}26 100%)`,
+              }}
             >
               <div className="flex w-full items-center justify-between px-4">
-                <button type="button" onClick={onClose} className="text-2xl leading-none text-gray-700">
-                  ×
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Fechar"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-gray-700"
+                >
+                  <BackArrowIcon className="h-5 w-5" />
                 </button>
                 <div className="flex items-center gap-2">
                   <button
@@ -67,14 +74,18 @@ export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
                   </button>
                 </div>
               </div>
-              <span className="mt-1 text-xs text-gray-600">{formatId(pokemon.id)}</span>
-              <img src={pokemon.artwork} alt={pokemon.name} className="h-36 w-36 object-contain" />
+              <img
+                src={pokemon.artwork}
+                alt={pokemon.name}
+                className="mt-2 h-36 w-36 object-contain"
+              />
             </div>
 
             <div className="flex flex-col items-center px-6 pt-4">
               <h2 className="text-2xl font-semibold text-black">
                 {formatPokemonName(pokemon.name)}
               </h2>
+              <span className="text-xs text-gray-500">{formatId(pokemon.id)}</span>
               <div className="mt-2 flex gap-1.5">
                 {pokemon.types.map((type) => (
                   <span
@@ -87,6 +98,14 @@ export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
                   </span>
                 ))}
               </div>
+
+              {pokemon.description && (
+                <p className="mt-3 text-center text-sm leading-relaxed text-gray-600">
+                  {pokemon.description}
+                </p>
+              )}
+
+              <div className="mt-5 h-px w-full bg-gray-100" />
 
               <div className="mt-5 grid w-full grid-cols-2 gap-3">
                 <div className="rounded-2xl border border-gray-200 p-3">

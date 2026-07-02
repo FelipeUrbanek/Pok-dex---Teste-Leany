@@ -30,6 +30,7 @@ export interface PokemonDetail extends PokemonSummary {
   speciesName: string
   ability: string
   category: string
+  description: string
 }
 
 export interface PokemonSpeciesInfo {

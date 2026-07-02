@@ -83,5 +83,7 @@ export interface RawTypeResponse {
   pokemon: { pokemon: NamedAPIResource; slot: number }[]
   damage_relations: {
     double_damage_from: NamedAPIResource[]
+    half_damage_from: NamedAPIResource[]
+    no_damage_from: NamedAPIResource[]
   }
 }
