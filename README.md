@@ -8,6 +8,8 @@
 ![React Query](https://img.shields.io/badge/React_Query-5.x-FF4154?style=flat-square&logo=react-query&logoColor=white)
 ![GSAP](https://img.shields.io/badge/GSAP-3.x-88CE02?style=flat-square&logo=greensock&logoColor=white)
 
+**🚀 Deploy Oficial:** [pokedex-teste-leany.vercel.app](https://pokedex-teste-leany.vercel.app)
+
 Uma Pokédex responsiva e interativa desenvolvida como resolução do desafio técnico para desenvolvedor Frontend na Leany. A aplicação consome a [PokeAPI](https://pokeapi.co/) para exibir uma listagem infinita de Pokémons, detalhes, evoluções e funcionalidades avançadas como filtros compostos e comparador de status.
 
 Desenvolvido por [Felipe Urbanek](https://felipeurbanek.com).
