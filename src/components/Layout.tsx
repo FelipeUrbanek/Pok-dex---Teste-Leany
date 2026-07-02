@@ -3,8 +3,8 @@ import { useCompareStore } from '../store/compare'
 import { CompareIcon, HeartIcon, PokeballIcon } from './icons'
 
 const tabLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `flex w-16 flex-col items-center gap-1 py-1 text-[11px] font-medium ${
-    isActive ? 'text-[#173EA5]' : 'text-gray-400'
+  `flex w-16 flex-col items-center gap-1 py-1 text-[11px] font-medium transition-colors ${
+    isActive ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'
   }`
 
 export function Layout() {

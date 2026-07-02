@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery, keepPreviousData } from '@tanstack/react-query'
 import { getPokemonByUrl } from '../api/pokeapi'
 import { toPokemonSummary, idFromUrl } from '../utils/mappers'
 import { usePokemonNameIndex } from './usePokemonNameIndex'
@@ -105,6 +105,7 @@ export function usePokemonBrowse(params: BrowseParams) {
     queryFn: () => fetchGraphQLFiltered(params),
     enabled: hasAdvancedFilters,
     staleTime: 60 * 60 * 1000,
+    placeholderData: keepPreviousData,
   })
 
   let source: NamedAPIResource[] | undefined
@@ -143,6 +144,7 @@ export function usePokemonBrowse(params: BrowseParams) {
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextOffset,
     enabled: source !== undefined,
+    placeholderData: keepPreviousData,
   })
 
   return { ...query, isSourceLoading }

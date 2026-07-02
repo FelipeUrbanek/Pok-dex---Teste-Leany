@@ -117,17 +117,23 @@ export function Compare() {
 
   useEffect(() => {
     if (!ready || !containerRef.current) return
+    const pokes = containerRef.current.querySelectorAll('[data-poke-anim]')
+    gsap.fromTo(
+      pokes,
+      { opacity: 0, scale: 0, rotation: -15, y: -20 },
+      { opacity: 1, scale: 1, rotation: 0, y: 0, duration: 0.7, ease: 'back.out(1.6)', stagger: 0.15 }
+    )
     const bars = containerRef.current.querySelectorAll('[data-bar]')
     gsap.fromTo(
       bars,
       { scaleX: 0 },
-      { scaleX: 1, duration: 0.5, ease: 'power2.out', stagger: 0.05 },
+      { scaleX: 1, duration: 0.5, ease: 'power2.out', stagger: 0.05, delay: 0.3 },
     )
     const rows = containerRef.current.querySelectorAll('[data-row]')
     gsap.fromTo(
       rows,
       { opacity: 0, y: 8 },
-      { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out', stagger: 0.05 },
+      { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out', stagger: 0.05, delay: 0.3 },
     )
   }, [ready, pokemonA.data, pokemonB.data])
 
@@ -198,17 +204,17 @@ export function Compare() {
               const isWinner =
                 (index === 0 && winsA > winsB) || (index === 1 && winsB > winsA)
               return (
-                <div key={pokemon.id} className="relative flex flex-col items-center">
-                  {isWinner && (
-                    <span className="absolute -top-6 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
-                      🏆 Vencedor
-                    </span>
-                  )}
+                <div key={pokemon.id} data-poke-anim className="relative flex flex-col items-center">
                   <div className="relative flex h-[120px] w-[120px] items-center justify-center">
+                    {isWinner && (
+                      <span className="absolute -top-2 z-30 rounded-full bg-gradient-to-r from-amber-200 to-yellow-400 px-3 py-1 text-[11px] font-black text-amber-900 shadow-md ring-2 ring-white">
+                        🏆 Vencedor
+                      </span>
+                    )}
                     <img
                       src={pokemon.artwork}
                       alt={pokemon.name}
-                      className="absolute z-10 max-h-full max-w-full object-contain drop-shadow-xl transition-transform hover:scale-110 [image-rendering:pixelated]"
+                      className="absolute z-10 max-h-full max-w-full object-contain drop-shadow-xl transition-transform hover:scale-110 hover:-rotate-3 [image-rendering:pixelated]"
                     />
                     <div className="absolute inset-0 z-0 rounded-full bg-white/30 blur-2xl" />
                   </div>

@@ -80,7 +80,7 @@ export function Home() {
           <FilterIcon className="h-4 w-4" />
           Filtros
           {activeFiltersCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#173EA5] text-[10px] font-black text-white">
+            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 text-[10px] font-black text-white">
               {activeFiltersCount}
             </span>
           )}
@@ -95,7 +95,7 @@ export function Home() {
         </button>
       </div>
 
-      {(isLoading || isSourceLoading) && (
+      {(isLoading || isSourceLoading) && items.length === 0 && (
         <p className="py-10 text-center text-sm font-medium text-gray-400">Carregando Pokémons...</p>
       )}
 

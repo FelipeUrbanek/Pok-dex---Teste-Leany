@@ -13,7 +13,7 @@ export function LoadMoreButton({ onClick, loading, disabled }: Props) {
         type="button"
         onClick={onClick}
         disabled={loading}
-        className="rounded-full bg-[#173EA5] px-6 py-2.5 text-sm font-medium text-white transition hover:brightness-110 disabled:opacity-60"
+        className="rounded-full bg-gray-900 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-black disabled:opacity-60"
       >
         {loading ? 'Carregando...' : 'Carregar mais'}
       </button>
