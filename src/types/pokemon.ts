@@ -31,6 +31,7 @@ export interface PokemonDetail extends PokemonSummary {
   ability: string
   category: string
   description: string
+  femaleRate: number | null
 }
 
 export interface PokemonSpeciesInfo {

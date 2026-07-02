@@ -66,7 +66,11 @@ export function Compare() {
           <div className="mb-6 flex items-center justify-around">
             {[pokemonA.data, pokemonB.data].map((pokemon) => (
               <div key={pokemon.id} className="flex flex-col items-center">
-                <img src={pokemon.artwork} alt={pokemon.name} className="h-28 w-28 object-contain" />
+                <img
+                  src={pokemon.artwork}
+                  alt={pokemon.name}
+                  className="h-28 w-28 object-contain [image-rendering:pixelated]"
+                />
                 <p className="font-semibold text-gray-900">{formatPokemonName(pokemon.name)}</p>
                 <div className="mt-1 flex gap-1">
                   {pokemon.types.map((type) => (

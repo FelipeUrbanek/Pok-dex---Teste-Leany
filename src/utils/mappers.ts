@@ -4,8 +4,8 @@ import { formatPokemonName } from './formatters'
 
 function getSprite(raw: RawPokemon): string {
   return (
-    raw.sprites.other['official-artwork'].front_default ??
     raw.sprites.front_default ??
+    raw.sprites.other['official-artwork'].front_default ??
     ''
   )
 }
@@ -53,6 +53,8 @@ export function toPokemonDetail(raw: RawPokemon, species?: RawPokemonSpecies): P
     ability: ability ? formatPokemonName(ability.ability.name) : '—',
     category: getGenus(species),
     description: getDescription(species),
+    femaleRate:
+      species && species.gender_rate >= 0 ? species.gender_rate / 8 : null,
   }
 }
 

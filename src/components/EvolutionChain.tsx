@@ -38,7 +38,11 @@ export function EvolutionChain({ speciesName, onSelect }: Props) {
               className="flex h-[74px] w-24 shrink-0 items-center justify-center rounded-full"
               style={{ backgroundColor: typeColor(node.types[0]) }}
             >
-              <img src={node.sprite} alt={node.name} className="h-16 w-16 object-contain" />
+              <img
+                src={node.sprite}
+                alt={node.name}
+                className="h-16 w-16 object-contain [image-rendering:pixelated]"
+              />
             </div>
             <div>
               <p className="text-sm font-semibold text-black">{formatPokemonName(node.name)}</p>

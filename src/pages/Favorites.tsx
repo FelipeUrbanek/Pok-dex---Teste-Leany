@@ -2,6 +2,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useFavoritesStore } from '../store/favorites'
 import { PokemonCard } from '../components/PokemonCard'
 import { PokemonModal } from '../components/PokemonModal'
+import { EmptyFishIcon } from '../components/icons'
 
 export function Favorites() {
   const favorites = useFavoritesStore((s) => s.favorites)
@@ -25,7 +26,7 @@ export function Favorites() {
   if (favorites.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <span className="text-4xl">🎣</span>
+        <EmptyFishIcon className="h-28 w-28" />
         <h1 className="text-lg font-semibold text-gray-700">
           Você não favoritou nenhum Pokémon :(
         </h1>

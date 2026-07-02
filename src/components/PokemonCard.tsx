@@ -45,16 +45,23 @@ export function PokemonCard({ pokemon, onSelect }: Props) {
         </div>
       </div>
 
-      <div
-        className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl"
-        style={{ backgroundColor: accent }}
-      >
-        <img
-          src={pokemon.sprite}
-          alt={pokemon.name}
-          loading="lazy"
-          className="h-16 w-16 object-contain drop-shadow-md"
-        />
+      <div className="relative h-20 w-20 shrink-0">
+        <div
+          className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl"
+          style={{ backgroundColor: accent }}
+        >
+          <TypeIcon
+            type={mainType}
+            color="#FFFFFF"
+            className="pointer-events-none absolute h-20 w-20 opacity-30"
+          />
+          <img
+            src={pokemon.sprite}
+            alt={pokemon.name}
+            loading="lazy"
+            className="relative z-[1] h-16 w-16 object-contain drop-shadow-md [image-rendering:pixelated]"
+          />
+        </div>
         <button
           type="button"
           onClick={(event) => {

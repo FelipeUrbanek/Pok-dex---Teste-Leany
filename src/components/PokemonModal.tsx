@@ -3,7 +3,18 @@ import { usePokemonWeaknesses } from '../hooks/usePokemonWeaknesses'
 import { useFavoritesStore } from '../store/favorites'
 import { useCompareStore } from '../store/compare'
 import { EvolutionChain } from './EvolutionChain'
-import { BackArrowIcon, CompareIcon, HeartIcon, TypeIcon } from './icons'
+import {
+  AbilityIcon,
+  BackArrowIcon,
+  CategoryIcon,
+  CompareIcon,
+  FemaleIcon,
+  HeartIcon,
+  MaleIcon,
+  RulerIcon,
+  TypeIcon,
+  WeightIcon,
+} from './icons'
 import { typeColor, typeLabel } from '../utils/typeColors'
 import { formatId, formatPokemonName, formatStatName } from '../utils/formatters'
 
@@ -74,10 +85,15 @@ export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
                   </button>
                 </div>
               </div>
+              <TypeIcon
+                type={pokemon.types[0]}
+                color="#FFFFFF"
+                className="pointer-events-none absolute left-1/2 top-2 h-48 w-48 -translate-x-1/2 opacity-40"
+              />
               <img
                 src={pokemon.artwork}
                 alt={pokemon.name}
-                className="mt-2 h-36 w-36 object-contain"
+                className="relative z-[1] mt-2 h-36 w-36 object-contain [image-rendering:pixelated]"
               />
             </div>
 
@@ -109,30 +125,58 @@ export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
 
               <div className="mt-5 grid w-full grid-cols-2 gap-3">
                 <div className="rounded-2xl border border-gray-200 p-3">
-                  <p className="text-[10px] font-medium uppercase tracking-wide text-gray-500">
-                    Peso
+                  <p className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
+                    <WeightIcon className="h-3.5 w-3.5" /> Peso
                   </p>
                   <p className="text-base font-semibold text-gray-900">{pokemon.weightKg} kg</p>
                 </div>
                 <div className="rounded-2xl border border-gray-200 p-3">
-                  <p className="text-[10px] font-medium uppercase tracking-wide text-gray-500">
-                    Altura
+                  <p className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
+                    <RulerIcon className="h-3.5 w-3.5" /> Altura
                   </p>
                   <p className="text-base font-semibold text-gray-900">{pokemon.heightM} m</p>
                 </div>
                 <div className="rounded-2xl border border-gray-200 p-3">
-                  <p className="text-[10px] font-medium uppercase tracking-wide text-gray-500">
-                    Categoria
+                  <p className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
+                    <CategoryIcon className="h-3.5 w-3.5" /> Categoria
                   </p>
                   <p className="text-base font-semibold text-gray-900">{pokemon.category || '—'}</p>
                 </div>
                 <div className="rounded-2xl border border-gray-200 p-3">
-                  <p className="text-[10px] font-medium uppercase tracking-wide text-gray-500">
-                    Habilidade
+                  <p className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wide text-gray-500">
+                    <AbilityIcon className="h-3.5 w-3.5" /> Habilidade
                   </p>
                   <p className="text-base font-semibold text-gray-900">{pokemon.ability}</p>
                 </div>
               </div>
+
+              {pokemon.femaleRate !== null && (
+                <div className="mt-5 w-full">
+                  <p className="mb-1.5 text-center text-[10px] font-medium uppercase tracking-wide text-gray-500">
+                    Gênero
+                  </p>
+                  <div className="flex h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                    <div
+                      className="h-full bg-[#2551C3]"
+                      style={{ width: `${(1 - pokemon.femaleRate) * 100}%` }}
+                    />
+                    <div
+                      className="h-full bg-[#FF7596]"
+                      style={{ width: `${pokemon.femaleRate * 100}%` }}
+                    />
+                  </div>
+                  <div className="mt-1.5 flex justify-between text-xs text-gray-600">
+                    <span className="flex items-center gap-1">
+                      <MaleIcon className="h-3.5 w-3.5 text-[#2551C3]" />
+                      {(100 - pokemon.femaleRate * 100).toFixed(1)}%
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FemaleIcon className="h-3.5 w-3.5 text-[#FF7596]" />
+                      {(pokemon.femaleRate * 100).toFixed(1)}%
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="px-6 pb-6">

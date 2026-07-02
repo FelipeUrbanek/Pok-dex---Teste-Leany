@@ -53,6 +53,7 @@ export interface RawPokemonSpecies {
   name: string
   generation: NamedAPIResource
   evolution_chain: { url: string }
+  gender_rate: number
   genera: {
     genus: string
     language: NamedAPIResource
