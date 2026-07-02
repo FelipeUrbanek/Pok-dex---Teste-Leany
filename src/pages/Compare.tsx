@@ -3,6 +3,7 @@ import { usePokemonDetail } from '../hooks/usePokemonDetail'
 import { usePokemonNameIndex } from '../hooks/usePokemonNameIndex'
 import { formatPokemonName, formatStatName } from '../utils/formatters'
 import { typeColor, typeLabel } from '../utils/typeColors'
+import { TypeIcon } from '../components/icons'
 
 function PokemonPicker({ slot }: { slot: 'A' | 'B' }) {
   const value = useCompareStore((s) => (slot === 'A' ? s.slotA : s.slotB))
@@ -71,9 +72,10 @@ export function Compare() {
                   {pokemon.types.map((type) => (
                     <span
                       key={type}
-                      className="rounded-full px-2 py-0.5 text-[10px] font-medium text-white"
+                      className="flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium text-white"
                       style={{ backgroundColor: typeColor(type) }}
                     >
+                      <TypeIcon type={type} className="h-3 w-3" />
                       {typeLabel(type)}
                     </span>
                   ))}

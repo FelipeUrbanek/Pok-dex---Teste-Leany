@@ -1,7 +1,11 @@
+import type { PokemonType } from '../types/pokemon'
+import { TypeIcon } from './icons'
+
 interface Option {
   value: string
   label: string
   color?: string
+  icon?: PokemonType
 }
 
 interface Props {
@@ -32,13 +36,14 @@ export function FilterSheet({ title, options, selected, onToggle, onClose }: Pro
                 key={option.value}
                 type="button"
                 onClick={() => onToggle(option.value)}
-                className="flex h-[42px] w-full items-center justify-center rounded-full text-sm font-medium text-white transition"
+                className="flex h-[42px] w-full items-center justify-center gap-2 rounded-full text-sm font-medium text-white transition"
                 style={{
                   backgroundColor: option.color ?? '#1A1A1A',
                   outline: isSelected ? '3px solid rgba(23,62,165,0.4)' : 'none',
                   outlineOffset: '1px',
                 }}
               >
+                {option.icon && <TypeIcon type={option.icon} className="h-4 w-4" />}
                 {option.label}
               </button>
             )

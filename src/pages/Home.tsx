@@ -107,7 +107,12 @@ export function Home() {
           }}
           options={[
             { value: '', label: 'Todos os tipos', color: '#1A1A1A' },
-            ...POKEMON_TYPES.map((t) => ({ value: t, label: typeLabel(t), color: typeColor(t) })),
+            ...POKEMON_TYPES.map((t) => ({
+              value: t,
+              label: typeLabel(t),
+              color: typeColor(t),
+              icon: t,
+            })),
           ]}
         />
       )}

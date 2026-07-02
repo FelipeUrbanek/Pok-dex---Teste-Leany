@@ -3,7 +3,7 @@ import { usePokemonWeaknesses } from '../hooks/usePokemonWeaknesses'
 import { useFavoritesStore } from '../store/favorites'
 import { useCompareStore } from '../store/compare'
 import { EvolutionChain } from './EvolutionChain'
-import { CompareIcon, HeartIcon } from './icons'
+import { CompareIcon, HeartIcon, TypeIcon } from './icons'
 import { typeColor, typeLabel } from '../utils/typeColors'
 import { formatId, formatPokemonName, formatStatName } from '../utils/formatters'
 
@@ -79,9 +79,10 @@ export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
                 {pokemon.types.map((type) => (
                   <span
                     key={type}
-                    className="rounded-full px-3 py-1 text-xs font-medium text-white"
+                    className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium text-white"
                     style={{ backgroundColor: typeColor(type) }}
                   >
+                    <TypeIcon type={type} className="h-3.5 w-3.5" />
                     {typeLabel(type)}
                   </span>
                 ))}
@@ -123,9 +124,10 @@ export function PokemonModal({ name, onClose, onSelectPokemon }: Props) {
                     {weaknesses.map((type) => (
                       <span
                         key={type}
-                        className="rounded-full px-3 py-1 text-xs font-medium text-white"
+                        className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium text-white"
                         style={{ backgroundColor: typeColor(type) }}
                       >
+                        <TypeIcon type={type} className="h-3.5 w-3.5" />
                         {typeLabel(type)}
                       </span>
                     ))}

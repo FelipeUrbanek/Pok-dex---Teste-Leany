@@ -3,7 +3,7 @@ import { typeColor, typeLabel, typeTint } from '../utils/typeColors'
 import { formatId, formatPokemonName } from '../utils/formatters'
 import { useFavoritesStore } from '../store/favorites'
 import { useCompareStore } from '../store/compare'
-import { CompareIcon, HeartIcon } from './icons'
+import { CompareIcon, HeartIcon, TypeIcon } from './icons'
 
 interface Props {
   pokemon: PokemonSummary
@@ -38,7 +38,7 @@ export function PokemonCard({ pokemon, onSelect }: Props) {
               className="flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium text-white"
               style={{ backgroundColor: typeColor(type) }}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
+              <TypeIcon type={type} className="h-2.5 w-2.5" />
               {typeLabel(type)}
             </span>
           ))}

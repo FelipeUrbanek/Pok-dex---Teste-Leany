@@ -1,5 +1,33 @@
+import type { PokemonType } from '../types/pokemon'
+
 interface IconProps {
   className?: string
+}
+
+export function TypeIcon({
+  type,
+  className,
+  color = '#FFFFFF',
+}: IconProps & { type: PokemonType; color?: string }) {
+  const maskImage = `url(/icons/types/${type}.svg)`
+  return (
+    <span
+      aria-hidden="true"
+      className={className}
+      style={{
+        display: 'inline-block',
+        backgroundColor: color,
+        WebkitMaskImage: maskImage,
+        maskImage,
+        WebkitMaskSize: 'contain',
+        maskSize: 'contain',
+        WebkitMaskRepeat: 'no-repeat',
+        maskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center',
+        maskPosition: 'center',
+      }}
+    />
+  )
 }
 
 export function HeartIcon({
