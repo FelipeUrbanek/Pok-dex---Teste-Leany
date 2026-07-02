@@ -1,4 +1,9 @@
-# Pokédex - Teste Técnico Leany
+<div align="center">
+  <img src="https://www.leany.com.br/lovable-uploads/bf894694-b8cc-4d09-9fab-d469b452aa1e.png" alt="Leany Logo" height="60" />
+  <h1>Pokédex - Teste Técnico Leany</h1>
+</div>
+
+<br/>
 
 ![React](https://img.shields.io/badge/React-18.x-61DAFB?style=flat-square&logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)

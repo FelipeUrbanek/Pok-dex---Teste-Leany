@@ -15,13 +15,6 @@ export function Layout() {
 
   return (
     <div className="min-h-screen bg-[#F2F2F2] pb-20">
-      <header className="pt-8 pb-2 flex justify-center">
-        <img 
-          src="https://www.leany.com.br/lovable-uploads/bf894694-b8cc-4d09-9fab-d469b452aa1e.png" 
-          alt="Leany Logo" 
-          className="h-8 object-contain"
-        />
-      </header>
       <main className="mx-auto max-w-5xl px-4 py-6">
         <Outlet />
       </main>
